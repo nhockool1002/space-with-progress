@@ -129,18 +129,51 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
   }, [isShipManeuvering]);
 
   const resetProgress = useCallback(() => {
-    if (isShipManeuvering) return;
+    if (!config || isShipManeuvering) return;
+
+    // Nếu đã ở mốc đầu thì reset tức thì.
+    if (config.activeStepIndex <= 0) {
+      clearShipTimers();
+      setShipFacing("forward");
+      setShipThrust(false);
+      setIsShipManeuvering(false);
+      setConfig((c) => {
+        if (!c) return c;
+        const next = { ...c, completedCount: 0, activeStepIndex: 0 };
+        saveConfig(next);
+        return next;
+      });
+      return;
+    }
+
     clearShipTimers();
-    setShipFacing("forward");
-    setShipThrust(false);
-    setIsShipManeuvering(false);
-    setConfig((c) => {
-      if (!c) return c;
-      const next = { ...c, completedCount: 0, activeStepIndex: 0 };
-      saveConfig(next);
-      return next;
-    });
-  }, [clearShipTimers, isShipManeuvering]);
+    setIsShipManeuvering(true);
+    setShipThrust(true);
+    setShipFacing("backward");
+
+    turnTimerRef.current = window.setTimeout(() => {
+      setConfig((c) => {
+        if (!c) return c;
+        const next = { ...c, completedCount: 0, activeStepIndex: 0 };
+        saveConfig(next);
+        return next;
+      });
+
+      moveTimerRef.current = window.setTimeout(() => {
+        setShipFacing("forward");
+        restoreTimerRef.current = window.setTimeout(() => {
+          setShipThrust(false);
+          setIsShipManeuvering(false);
+        }, SHIP_TURN_MS);
+      }, SHIP_MOVE_MS);
+    }, SHIP_TURN_MS);
+  }, [
+    SHIP_MOVE_MS,
+    SHIP_TURN_MS,
+    clearShipTimers,
+    config,
+    isShipManeuvering,
+  ]);
 
   if (!config || !ui) {
     return (
