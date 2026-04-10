@@ -350,6 +350,64 @@ export default function SetupPage() {
 
           <div className="rounded-lg border border-slate-200 bg-white/70 px-3 py-3 dark:border-slate-600 dark:bg-slate-900/60">
             <p className="text-xs font-semibold text-slate-800 dark:text-slate-100">
+              Laser spaceship
+            </p>
+            <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+              Chỉnh màu tia laser và bật/tắt âm thanh khi bắn.
+            </p>
+            <div className="mt-3 grid grid-cols-2 gap-3 sm:max-w-sm">
+              <div>
+                <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
+                  Laser A
+                </label>
+                <input
+                  type="color"
+                  className="h-10 w-full cursor-pointer rounded border border-slate-300 bg-white"
+                  value={ui.laserColorA}
+                  onChange={(e) =>
+                    setUi((u) => (u ? { ...u, laserColorA: e.target.value } : u))
+                  }
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
+                  Laser B
+                </label>
+                <input
+                  type="color"
+                  className="h-10 w-full cursor-pointer rounded border border-slate-300 bg-white"
+                  value={ui.laserColorB}
+                  onChange={(e) =>
+                    setUi((u) => (u ? { ...u, laserColorB: e.target.value } : u))
+                  }
+                />
+              </div>
+            </div>
+            <div className="mt-3 flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50/70 px-3 py-3 dark:border-slate-700 dark:bg-slate-900/70">
+              <input
+                id="laser-sound"
+                type="checkbox"
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500/40 dark:border-slate-500"
+                checked={ui.laserSoundEnabled}
+                onChange={(e) =>
+                  setUi((u) =>
+                    u ? { ...u, laserSoundEnabled: e.target.checked } : u
+                  )
+                }
+              />
+              <label htmlFor="laser-sound" className="cursor-pointer text-sm">
+                <span className="font-medium text-slate-800 dark:text-slate-100">
+                  Bật âm thanh laser
+                </span>
+                <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
+                  Phát âm &quot;pew&quot; ngắn khi bắn laser và chuỗi âm thanh nhỏ khi hoàn thành.
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-slate-200 bg-white/70 px-3 py-3 dark:border-slate-600 dark:bg-slate-900/60">
+            <p className="text-xs font-semibold text-slate-800 dark:text-slate-100">
               Spaceship hiển thị trên progress bar
             </p>
             <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">

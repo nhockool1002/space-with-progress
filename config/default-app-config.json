@@ -50,7 +50,7 @@
     ]
   },
   "ui": {
-    "schemaVersion": 4,
+    "schemaVersion": 5,
     "pageEyebrow": "Diễn tập · Progress",
     "pageTitle": "DỰ ÁN NÂNG CẤP T24 R25",
     "pageDescription": "DỰ ÁN NÂNG CẤP T24 R25",
@@ -60,6 +60,9 @@
     "spaceEffectsEnabled": true,
     "flameColorA": "#fbbf24",
     "flameColorB": "#ea580c",
-    "spaceshipImage": "/spaceship.png"
+    "spaceshipImage": "/spaceship.png",
+    "laserColorA": "#22d3ee",
+    "laserColorB": "#a78bfa",
+    "laserSoundEnabled": true
   }
 }

@@ -1,7 +1,7 @@
 import defaultAppConfig from "@/config/default-app-config.json";
 
 export const UI_SETTINGS_KEY = "spaceship-progress-ui";
-export const UI_SETTINGS_VERSION = 4;
+export const UI_SETTINGS_VERSION = 5;
 
 /** Tiêu đề / mô tả mặc định (theo `config/default-app-config.json`) */
 export const DEFAULT_PROJECT_HEADING = defaultAppConfig.ui.pageTitle;
@@ -28,6 +28,11 @@ export type PageUiSettings = {
   flameColorB: string;
   /** Ảnh spaceship hiển thị trên progress bar */
   spaceshipImage: string;
+  /** Màu tia laser spaceship (gradient A->B) */
+  laserColorA: string;
+  laserColorB: string;
+  /** Bật/tắt âm thanh laser */
+  laserSoundEnabled: boolean;
 };
 
 function normalizeHeadingField(
@@ -56,6 +61,10 @@ export function getDefaultUiSettings(): PageUiSettings {
     flameColorA: String(u.flameColorA ?? "#fbbf24"),
     flameColorB: String(u.flameColorB ?? "#ea580c"),
     spaceshipImage: String(u.spaceshipImage ?? "/spaceship.png"),
+    laserColorA: String(u.laserColorA ?? "#22d3ee"),
+    laserColorB: String(u.laserColorB ?? "#a78bfa"),
+    laserSoundEnabled:
+      typeof u.laserSoundEnabled === "boolean" ? u.laserSoundEnabled : true,
   };
 }
 
@@ -89,6 +98,12 @@ export function loadUiSettings(): PageUiSettings {
       flameColorA: String(o.flameColorA ?? def.flameColorA),
       flameColorB: String(o.flameColorB ?? def.flameColorB),
       spaceshipImage: String(o.spaceshipImage ?? def.spaceshipImage),
+      laserColorA: String(o.laserColorA ?? def.laserColorA),
+      laserColorB: String(o.laserColorB ?? def.laserColorB),
+      laserSoundEnabled:
+        typeof o.laserSoundEnabled === "boolean"
+          ? o.laserSoundEnabled
+          : def.laserSoundEnabled,
     };
   } catch {
     return getDefaultUiSettings();

@@ -79,6 +79,329 @@ body {
   transform: rotate(-90deg);
 }
 
+@keyframes ship-boost-surge {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    filter: brightness(1);
+  }
+  45% {
+    transform: translateY(-2px) scale(1.08);
+    filter: brightness(1.25);
+  }
+}
+
+@keyframes ship-roll-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ship-shield-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.07);
+  }
+}
+
+@keyframes ship-local-flash {
+  0% {
+    opacity: 0;
+    transform: scale(0.65);
+  }
+  45% {
+    opacity: 0.95;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes ship-impact-burst {
+  0% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(calc(1.55 * var(--fx-scale, 1)));
+  }
+}
+
+@keyframes ship-shockwave-spread {
+  0% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(0.25);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(calc(2.6 * var(--fx-scale, 1)));
+  }
+}
+
+@keyframes ship-afterimage-fade {
+  0% {
+    opacity: 0.6;
+    transform: translate3d(0, 0, 0) scale(0.98);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(18px, 8px, 0) scale(0.82);
+  }
+}
+
+@keyframes ship-hyper-jump {
+  0% {
+    opacity: 1;
+    filter: brightness(1);
+    transform: scale(1);
+  }
+  45% {
+    opacity: 0.15;
+    filter: brightness(1.55) blur(1.3px);
+    transform: scale(0.72);
+  }
+  80% {
+    opacity: 0.12;
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes ship-laser-pulse {
+  0% {
+    opacity: 0;
+    transform: scaleX(0.2);
+    filter: brightness(0.95) blur(0.2px);
+  }
+  18% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(0.85);
+    filter: brightness(1.1) blur(0.7px);
+  }
+}
+
+.ship-laser-shot {
+  height: 4px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    var(--laser-a, #22d3ee) 0%,
+    var(--laser-b, #a78bfa) 68%,
+    transparent 100%
+  );
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--laser-a, #22d3ee) 92%, white) 0%,
+    color-mix(in srgb, var(--laser-a, #22d3ee) 80%, var(--laser-b, #a78bfa)) 45%,
+    color-mix(in srgb, var(--laser-b, #a78bfa) 85%, transparent) 100%
+  );
+  box-shadow:
+    0 0 8px var(--laser-a, #22d3ee),
+    0 0 14px var(--laser-b, #a78bfa);
+  box-shadow:
+    0 0 10px color-mix(in srgb, var(--laser-a, #22d3ee) 80%, transparent),
+    0 0 20px color-mix(in srgb, var(--laser-b, #a78bfa) 65%, transparent);
+  animation: ship-laser-pulse 520ms ease-out forwards;
+}
+
+.ship-laser-step {
+  height: 2.5px;
+  opacity: 0.9;
+}
+
+.ship-laser-target {
+  height: 3.5px;
+  box-shadow:
+    0 0 12px color-mix(in srgb, var(--laser-a, #22d3ee) 90%, transparent),
+    0 0 24px color-mix(in srgb, var(--laser-b, #a78bfa) 68%, transparent);
+}
+
+.ship-laser-celebrate {
+  height: 4px;
+  filter: saturate(1.2);
+}
+
+.ship-impact-burst {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--laser-a, #22d3ee) 88%, white) 0%,
+    color-mix(in srgb, var(--laser-b, #a78bfa) 68%, transparent) 48%,
+    transparent 72%
+  );
+  box-shadow:
+    0 0 14px color-mix(in srgb, var(--laser-a, #22d3ee) 85%, transparent),
+    0 0 24px color-mix(in srgb, var(--laser-b, #a78bfa) 65%, transparent);
+  animation: ship-impact-burst 360ms ease-out forwards;
+}
+
+.ship-shockwave {
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  border: 2px solid color-mix(in srgb, var(--laser-a, #22d3ee) 85%, transparent);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--laser-b, #a78bfa) 55%, transparent);
+  animation: ship-shockwave-spread 520ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+.ship-boosting {
+  animation: ship-boost-surge 0.28s ease-in-out infinite;
+}
+
+.ship-rolling {
+  animation: ship-roll-spin 0.9s cubic-bezier(0.2, 0.75, 0.35, 1) 1;
+}
+
+.ship-shield {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 58px;
+  height: 58px;
+  margin-left: -29px;
+  margin-top: -29px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--laser-a, #22d3ee) 72%, white);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--laser-a, #22d3ee) 15%, transparent) 0%,
+    color-mix(in srgb, var(--laser-b, #a78bfa) 14%, transparent) 45%,
+    transparent 68%
+  );
+  box-shadow:
+    inset 0 0 12px color-mix(in srgb, var(--laser-a, #22d3ee) 40%, transparent),
+    0 0 16px color-mix(in srgb, var(--laser-b, #a78bfa) 45%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ship-shield-on .ship-shield {
+  opacity: 1;
+  animation: ship-shield-pulse 1s ease-in-out infinite;
+}
+
+.ship-shield-ring-2 {
+  width: 68px;
+  height: 68px;
+  margin-left: -34px;
+  margin-top: -34px;
+  opacity: 0;
+}
+
+.ship-shield-ring-3 {
+  width: 78px;
+  height: 78px;
+  margin-left: -39px;
+  margin-top: -39px;
+  opacity: 0;
+}
+
+.ship-shield-on .ship-shield-ring-2 {
+  opacity: 0.66;
+  animation: ship-shield-pulse 1.25s ease-in-out infinite reverse;
+}
+
+.ship-shield-on .ship-shield-ring-3 {
+  opacity: 0.48;
+  animation: ship-shield-pulse 1.55s ease-in-out infinite;
+}
+
+.ship-local-flash {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 84px;
+  height: 84px;
+  margin-left: -42px;
+  margin-top: -42px;
+  border-radius: 9999px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--laser-a, #22d3ee) 26%, white) 0%,
+    color-mix(in srgb, var(--laser-b, #a78bfa) 24%, transparent) 42%,
+    transparent 70%
+  );
+}
+
+.ship-local-flash-on {
+  animation: ship-local-flash 220ms ease-out forwards;
+}
+
+.ship-afterimage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  margin-left: -22px;
+  margin-top: -22px;
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--laser-a, #22d3ee) 30%, white) 0%,
+    color-mix(in srgb, var(--laser-b, #a78bfa) 20%, transparent) 50%,
+    transparent 74%
+  );
+  animation: ship-afterimage-fade 460ms ease-out infinite;
+}
+
+.ship-afterimage-1 {
+  animation-delay: 0ms;
+}
+
+.ship-afterimage-2 {
+  animation-delay: 80ms;
+}
+
+.ship-afterimage-3 {
+  animation-delay: 160ms;
+}
+
+.ship-hyper-jump {
+  animation: ship-hyper-jump 620ms cubic-bezier(0.2, 0.8, 0.2, 1) 1;
+}
+
+.ship-overheated .ship-laser-shot,
+.ship-overheated .ship-tail-streak {
+  filter: hue-rotate(-16deg) saturate(1.22);
+}
+
+.ship-laser-overheated {
+  filter: hue-rotate(-24deg) saturate(1.35) brightness(1.08);
+}
+
+.ship-reduced-motion .ship-afterimage,
+.ship-reduced-motion .ship-shockwave,
+.ship-reduced-motion .ship-impact-burst {
+  animation-duration: 220ms;
+}
+
 @keyframes flame-pulse {
   0%,
   100% {
