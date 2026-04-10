@@ -16,28 +16,40 @@ export default function Home() {
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col text-slate-800">
+      {/* Nền vũ trụ CSS (file /space-bg.jpg không có trong public — dùng gradient + tinh vân có animation) */}
       <div
-        className="pointer-events-none fixed inset-0 -z-20 bg-slate-100 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url(/space-bg.jpg)" }}
+        className="pointer-events-none fixed inset-0 -z-30 overflow-hidden bg-[#050510]"
         aria-hidden
-      />
-      {/* Lớp sáng: giữ ảnh vũ trụ nhưng UI tông sáng */}
-      <div
-        className="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-b from-slate-50/92 via-sky-50/88 to-slate-100/95"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_120%_70%_at_50%_-10%,rgba(255,255,255,0.5)_0%,transparent_55%)]"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none fixed inset-0 -z-10 opacity-[0.35] [background-image:radial-gradient(rgba(15,118,110,0.06)_1px,transparent_1px)] [background-size:20px_20px]"
-        aria-hidden
-      />
+      >
+        <div className="cosmic-bg-layer cosmic-bg-drift absolute inset-[-15%] min-h-[130%] min-w-[130%]" />
+        <div className="cosmic-starfield cosmic-starfield-drift pointer-events-none absolute inset-0 opacity-[0.82]" />
+      </div>
 
       {ui?.spaceEffectsEnabled !== false ? <SpaceAmbience /> : null}
 
-      <header className="border-b border-slate-200/90 bg-white/75 px-4 py-4 shadow-sm backdrop-blur-md sm:py-5">
+      {/* Phủ nhẹ — trước đây trắng ~80% khiến Chrome nhìn nhạt, tắt bớt để lộ màu tinh vân */}
+      <div
+        className="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-b from-white/52 via-sky-100/14 to-fuchsia-950/28"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_100%_50%_at_50%_-8%,rgba(255,255,255,0.32)_0%,transparent_52%)]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_75%_55%_at_85%_100%,rgba(34,211,238,0.26)_0%,transparent_48%)]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(ellipse_60%_50%_at_10%_95%,rgba(167,139,250,0.18)_0%,transparent_50%)]"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none fixed inset-0 -z-10 opacity-[0.18] [background-image:radial-gradient(rgba(15,118,110,0.09)_1px,transparent_1px)] [background-size:22px_22px]"
+        aria-hidden
+      />
+
+      <header className="border-b border-slate-200/80 bg-white/92 px-4 py-4 shadow-md shadow-slate-900/5 backdrop-blur-md sm:py-5">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
           <div>
             {ui && (

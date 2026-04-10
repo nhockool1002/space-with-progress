@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import type { CSSProperties } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { ProgressConfig } from "@/lib/progress-storage";
 import { getStepSummary, loadConfig, saveConfig } from "@/lib/progress-storage";
 import { loadUiSettings, type PageUiSettings } from "@/lib/ui-settings";
@@ -15,6 +15,8 @@ type Props = {
 export function ProgressBarView({ refreshKey = 0 }: Props) {
   const [config, setConfig] = useState<ProgressConfig | null>(null);
   const [ui, setUi] = useState<PageUiSettings | null>(null);
+  const [shipThrust, setShipThrust] = useState(false);
+  const prevActiveStepRef = useRef<number | null>(null);
 
   const refresh = useCallback(() => {
     setConfig(loadConfig());
@@ -24,6 +26,20 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
   useEffect(() => {
     refresh();
   }, [refresh, refreshKey]);
+
+  useEffect(() => {
+    if (!config) return;
+    const idx = config.activeStepIndex;
+    if (prevActiveStepRef.current === null) {
+      prevActiveStepRef.current = idx;
+      return;
+    }
+    if (prevActiveStepRef.current === idx) return;
+    prevActiveStepRef.current = idx;
+    setShipThrust(true);
+    const t = window.setTimeout(() => setShipThrust(false), 1950);
+    return () => window.clearTimeout(t);
+  }, [config]);
 
   const selectStep = useCallback((index: number) => {
     setConfig((c) => {
@@ -92,7 +108,7 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
 
   return (
     <div className="w-full max-w-6xl space-y-6">
-      <div className="overflow-hidden rounded-[1.75rem] border border-slate-200/90 bg-white/90 p-4 shadow-[0_20px_50px_-12px_rgba(15,23,42,0.12),inset_0_1px_0_rgba(255,255,255,0.9)] backdrop-blur-sm sm:p-6">
+      <div className="overflow-hidden rounded-[1.75rem] border border-slate-200/80 bg-white p-4 shadow-[0_24px_60px_-12px_rgba(15,23,42,0.2),inset_0_1px_0_rgba(255,255,255,1)] sm:p-6">
         <div className="mb-3 flex flex-wrap items-end justify-between gap-3 border-b border-slate-200/80 pb-3">
           <div>
             <p className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-teal-600">
@@ -126,8 +142,8 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
           </div>
         </div>
 
-        <div className="relative z-30 mb-4 rounded-xl border border-sky-200/80 bg-sky-50/90 px-4 py-2.5 text-center shadow-sm">
-          <p className="text-[0.7rem] leading-relaxed text-slate-700">
+        <div className="relative z-30 mb-4 rounded-xl border border-sky-300/90 bg-sky-100 px-4 py-2.5 text-center shadow-sm">
+          <p className="text-[0.7rem] font-medium leading-relaxed text-slate-800">
             {"\u0110\u00e3 ho\u00e0n th\u00e0nh"}{" "}
             <span className="font-mono font-semibold text-emerald-600">
               {completedCount}
@@ -137,13 +153,13 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
           </p>
         </div>
 
-        <div className="relative z-0 mb-6 min-h-[5.25rem] isolate px-1 pt-1 sm:min-h-[5.75rem] sm:px-2">
+        <div className="relative z-0 mb-6 min-h-[5.25rem] isolate px-1 pb-12 pt-1 sm:min-h-[5.75rem] sm:px-2">
           <div
-            className="pointer-events-none absolute left-[4%] right-[4%] top-[60%] h-3.5 -translate-y-1/2 overflow-hidden rounded-full border border-slate-300/90 bg-slate-200/90 shadow-[inset_0_2px_6px_rgba(15,23,42,0.08)]"
+            className="pointer-events-none absolute left-[4%] right-[4%] top-[60%] h-3.5 -translate-y-1/2 overflow-hidden rounded-full border border-slate-300 bg-slate-200 shadow-[inset_0_2px_8px_rgba(15,23,42,0.12)]"
             aria-hidden
           >
             <div
-              className="track-fill-done h-full rounded-full bg-gradient-to-r from-emerald-600 via-emerald-400 to-teal-500 shadow-[0_0_18px_rgba(52,211,153,0.45)] transition-[width] duration-700 ease-out"
+              className="track-fill-done h-full rounded-full bg-gradient-to-r from-emerald-600 via-emerald-400 to-teal-500 shadow-[0_0_18px_rgba(52,211,153,0.45)] transition-[width] duration-[1150ms] ease-out"
               style={{
                 width: `${fillWidthPercent}%`,
                 minWidth: fillWidthPercent > 0 ? "4px" : undefined,
@@ -198,22 +214,54 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
             style={{
               left: `${shipLeftPercent}%`,
               transition:
-                "left 0.7s cubic-bezier(0.34, 1.15, 0.64, 1), transform 0.35s ease",
+                "left 1.15s cubic-bezier(0.34, 1.12, 0.64, 1), transform 0.5s ease",
             }}
           >
-            <div className="ship-motion flex flex-col items-center">
+            <div
+              className={
+                "ship-thrust-wrap ship-motion relative flex flex-col items-center " +
+                (shipThrust ? "ship-thrust-active" : "")
+              }
+            >
+              <span className="ship-fire-bloom" aria-hidden />
+              <span className="ship-smoke ship-smoke-1" aria-hidden />
+              <span className="ship-smoke ship-smoke-2" aria-hidden />
+              <span className="ship-smoke ship-smoke-3" aria-hidden />
+              <span className="ship-smoke ship-smoke-4" aria-hidden />
+              <span className="ship-smoke ship-smoke-5" aria-hidden />
+              <span className="ship-smoke ship-smoke-6" aria-hidden />
+              <span className="ship-smoke-dark ship-smoke-d1" aria-hidden />
+              <span className="ship-smoke-dark ship-smoke-d2" aria-hidden />
+              <span className="ship-spark ship-spark-1" aria-hidden />
+              <span className="ship-spark ship-spark-2" aria-hidden />
+              <span className="ship-spark ship-spark-3" aria-hidden />
+              <span className="ship-spark ship-spark-4" aria-hidden />
+              <span className="ship-fire-glow" aria-hidden />
               <Image
                 src="/spaceship.png"
                 alt=""
                 width={56}
                 height={56}
-                className="h-12 w-12 rotate-90 object-contain drop-shadow-[0_0_18px_rgba(251,146,60,0.65)] sm:h-14 sm:w-14"
+                className="ship-thrust-glow-target relative z-[2] h-12 w-12 rotate-90 object-contain drop-shadow-[0_0_18px_rgba(251,146,60,0.65)] sm:h-14 sm:w-14"
                 priority
               />
+              <div
+                className="ship-tail-streaks pointer-events-none relative z-[1] -mt-1 h-8 w-16 shrink-0 sm:h-9 sm:w-[4.5rem]"
+                aria-hidden
+              >
+                <span className="ship-tail-streak ship-tail-streak-1" />
+                <span className="ship-tail-streak ship-tail-streak-2" />
+                <span className="ship-tail-streak ship-tail-streak-3" />
+                <span className="ship-tail-streak ship-tail-streak-4" />
+                <span className="ship-tail-streak ship-tail-streak-5" />
+              </div>
               <span
-                className="ship-flame mt-0.5 h-2 w-4 rounded-full bg-gradient-to-b from-amber-300 to-orange-600 opacity-95 blur-[1.5px]"
+                className="ship-flame relative z-[2] -mt-6 h-2 w-4 rounded-full bg-gradient-to-b from-amber-300 to-orange-600 opacity-95 blur-[1.5px] sm:-mt-7"
                 aria-hidden
               />
+              <span className="ship-flame-extra" aria-hidden />
+              <span className="ship-fire-core" aria-hidden />
+              <span className="ship-fire-plume" aria-hidden />
             </div>
           </div>
         </div>
@@ -237,12 +285,12 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
                 />
                 {!done && (
                   <div
-                    className="step-card-tint pointer-events-none absolute inset-0 opacity-[0.1]"
+                    className="step-card-tint pointer-events-none absolute inset-0 opacity-[0.28]"
                     style={tintStyle}
                     aria-hidden
                   />
                 )}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/60 to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/28 to-transparent" />
                 <div className="relative flex min-h-0 flex-col gap-1.5 p-2.5 sm:p-3">
                   <div className="flex items-start justify-between gap-2">
                     <span className="font-mono text-[0.65rem] font-medium leading-tight tracking-wide text-teal-700">
@@ -275,10 +323,10 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
             const cardClass =
               "group relative flex min-h-[5.75rem] flex-col overflow-hidden rounded-xl border text-left outline-none transition " +
               (done
-                ? "cursor-not-allowed border-emerald-200 bg-emerald-50/80 "
-                : "border-slate-200 bg-slate-50/90 hover:border-slate-300 focus-visible:ring-2 focus-visible:ring-teal-400/60 ") +
+                ? "cursor-not-allowed border-emerald-300 bg-emerald-100 "
+                : "border-slate-300/90 bg-white hover:border-slate-400 focus-visible:ring-2 focus-visible:ring-teal-500/70 ") +
               (isActive && !done
-                ? "ring-2 ring-amber-300/80 shadow-sm shadow-amber-100 "
+                ? "ring-2 ring-amber-400 shadow-md shadow-amber-200/90 "
                 : "");
 
             if (done) {
@@ -309,8 +357,8 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200/90 bg-white/90 px-4 py-3 text-center shadow-sm sm:px-5">
-        <p className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-slate-500">
+      <div className="rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-center shadow-md shadow-slate-900/8 sm:px-5">
+        <p className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-slate-600">
           {"B\u01b0\u1edbc hi\u1ec7n t\u1ea1i"}
         </p>
         <p className="mt-1.5 text-sm font-medium leading-snug text-slate-900 sm:text-base">
