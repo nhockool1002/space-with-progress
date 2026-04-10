@@ -50,13 +50,16 @@
     ]
   },
   "ui": {
-    "schemaVersion": 2,
+    "schemaVersion": 4,
     "pageEyebrow": "Diễn tập · Progress",
     "pageTitle": "DỰ ÁN NÂNG CẤP T24 R25",
     "pageDescription": "DỰ ÁN NÂNG CẤP T24 R25",
     "panelEyebrow": "Lịch diễn tập",
     "panelTitle": "Tiến trình theo khung giờ",
     "panelHint": "",
-    "spaceEffectsEnabled": true
+    "spaceEffectsEnabled": true,
+    "flameColorA": "#fbbf24",
+    "flameColorB": "#ea580c",
+    "spaceshipImage": "/spaceship.png"
   }
 }

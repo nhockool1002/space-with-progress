@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   getDefaultConfig,
@@ -77,10 +78,30 @@ export default function SetupPage() {
   const [ui, setUi] = useState<PageUiSettings | null>(null);
   const [savedAt, setSavedAt] = useState<number | null>(null);
   const [savedUiAt, setSavedUiAt] = useState<number | null>(null);
+  const [spaceshipItems, setSpaceshipItems] = useState<
+    { id: string; name: string; src: string }[]
+  >([]);
 
   useEffect(() => {
     setConfig(loadConfig());
     setUi(loadUiSettings());
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/spaceships")
+      .then((r) => r.json())
+      .then((data: { items?: { id: string; name: string; src: string }[] }) => {
+        if (!active) return;
+        setSpaceshipItems(Array.isArray(data.items) ? data.items : []);
+      })
+      .catch(() => {
+        if (!active) return;
+        setSpaceshipItems([]);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   const updateStep = (index: number, patch: Partial<ProgressStep>) => {
@@ -288,6 +309,105 @@ export default function SetupPage() {
                 Tắt nếu muốn giao diện tĩnh hơn.
               </span>
             </label>
+          </div>
+
+          <div className="rounded-lg border border-slate-200 bg-white/70 px-3 py-3 dark:border-slate-600 dark:bg-slate-900/60">
+            <p className="text-xs font-semibold text-slate-800 dark:text-slate-100">
+              Màu lửa spaceship
+            </p>
+            <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+              Chọn 2 màu để tạo gradient cho ngọn lửa phía đuôi.
+            </p>
+            <div className="mt-3 grid grid-cols-2 gap-3 sm:max-w-sm">
+              <div>
+                <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
+                  Flame A
+                </label>
+                <input
+                  type="color"
+                  className="h-10 w-full cursor-pointer rounded border border-slate-300 bg-white"
+                  value={ui.flameColorA}
+                  onChange={(e) =>
+                    setUi((u) => (u ? { ...u, flameColorA: e.target.value } : u))
+                  }
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
+                  Flame B
+                </label>
+                <input
+                  type="color"
+                  className="h-10 w-full cursor-pointer rounded border border-slate-300 bg-white"
+                  value={ui.flameColorB}
+                  onChange={(e) =>
+                    setUi((u) => (u ? { ...u, flameColorB: e.target.value } : u))
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-lg border border-slate-200 bg-white/70 px-3 py-3 dark:border-slate-600 dark:bg-slate-900/60">
+            <p className="text-xs font-semibold text-slate-800 dark:text-slate-100">
+              Spaceship hiển thị trên progress bar
+            </p>
+            <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+              Mặc định dùng <code>/spaceship.png</code>. Có thể chọn ảnh trong{" "}
+              <code>/public/spaceship</code>.
+            </p>
+
+            <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50/70 p-3 dark:border-slate-700 dark:bg-slate-900/60">
+              <p className="mb-2 text-[0.68rem] uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                Preview
+              </p>
+              <div className="flex items-center gap-3">
+                <Image
+                  src={ui.spaceshipImage || "/spaceship.png"}
+                  alt="Preview spaceship"
+                  width={56}
+                  height={56}
+                  className="h-12 w-12 rotate-90 object-contain"
+                />
+                <p className="text-xs text-slate-600 dark:text-slate-300">
+                  {ui.spaceshipImage || "/spaceship.png"}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() =>
+                  setUi((u) => (u ? { ...u, spaceshipImage: "/spaceship.png" } : u))
+                }
+                className={
+                  "rounded-md border px-2.5 py-1 text-xs transition " +
+                  (ui.spaceshipImage === "/spaceship.png"
+                    ? "border-teal-500 bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-300"
+                    : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700")
+                }
+              >
+                Mặc định (/spaceship.png)
+              </button>
+              {spaceshipItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() =>
+                    setUi((u) => (u ? { ...u, spaceshipImage: item.src } : u))
+                  }
+                  className={
+                    "rounded-md border px-2.5 py-1 text-xs transition " +
+                    (ui.spaceshipImage === item.src
+                      ? "border-teal-500 bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-300"
+                      : "border-slate-300 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700")
+                  }
+                >
+                  {item.name}
+                </button>
+              ))}
+            </div>
           </div>
           <div className="flex flex-wrap gap-2">
             <button

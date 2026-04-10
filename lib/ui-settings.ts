@@ -1,7 +1,7 @@
 import defaultAppConfig from "@/config/default-app-config.json";
 
 export const UI_SETTINGS_KEY = "spaceship-progress-ui";
-export const UI_SETTINGS_VERSION = 2;
+export const UI_SETTINGS_VERSION = 4;
 
 /** Tiêu đề / mô tả mặc định (theo `config/default-app-config.json`) */
 export const DEFAULT_PROJECT_HEADING = defaultAppConfig.ui.pageTitle;
@@ -23,6 +23,11 @@ export type PageUiSettings = {
   panelHint: string;
   /** Sao / hiệu ứng nền vũ trụ nhẹ trên trang chính */
   spaceEffectsEnabled: boolean;
+  /** Màu lửa cho spaceship (gradient A->B) */
+  flameColorA: string;
+  flameColorB: string;
+  /** Ảnh spaceship hiển thị trên progress bar */
+  spaceshipImage: string;
 };
 
 function normalizeHeadingField(
@@ -48,6 +53,9 @@ export function getDefaultUiSettings(): PageUiSettings {
     panelHint: String(u.panelHint ?? ""),
     spaceEffectsEnabled:
       typeof u.spaceEffectsEnabled === "boolean" ? u.spaceEffectsEnabled : true,
+    flameColorA: String(u.flameColorA ?? "#fbbf24"),
+    flameColorB: String(u.flameColorB ?? "#ea580c"),
+    spaceshipImage: String(u.spaceshipImage ?? "/spaceship.png"),
   };
 }
 
@@ -78,6 +86,9 @@ export function loadUiSettings(): PageUiSettings {
         typeof o.spaceEffectsEnabled === "boolean"
           ? o.spaceEffectsEnabled
           : def.spaceEffectsEnabled,
+      flameColorA: String(o.flameColorA ?? def.flameColorA),
+      flameColorB: String(o.flameColorB ?? def.flameColorB),
+      spaceshipImage: String(o.spaceshipImage ?? def.spaceshipImage),
     };
   } catch {
     return getDefaultUiSettings();

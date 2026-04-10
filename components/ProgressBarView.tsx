@@ -233,6 +233,12 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
                 "ship-thrust-wrap ship-motion relative flex rotate-90 flex-col items-center " +
                 (shipThrust ? "ship-thrust-active" : "")
               }
+              style={
+                {
+                  "--flame-a": ui.flameColorA,
+                  "--flame-b": ui.flameColorB,
+                } as CSSProperties
+              }
             >
               <span className="ship-fire-bloom" aria-hidden />
               <span className="ship-smoke ship-smoke-1" aria-hidden />
@@ -249,11 +255,11 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
               <span className="ship-spark ship-spark-4" aria-hidden />
               <span className="ship-fire-glow" aria-hidden />
               <Image
-                src="/spaceship.png"
+                src={ui.spaceshipImage || "/spaceship.png"}
                 alt=""
                 width={56}
                 height={56}
-                className="ship-thrust-glow-target relative z-[2] h-12 w-12 shrink-0 object-contain drop-shadow-[0_0_18px_rgba(251,146,60,0.65)] sm:h-14 sm:w-14"
+                className="ship-thrust-glow-target relative z-[2] h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
                 priority
               />
               <div
@@ -267,7 +273,7 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
                 <span className="ship-tail-streak ship-tail-streak-5" />
               </div>
               <span
-                className="ship-flame relative z-[2] mt-0.5 h-2 w-4 rounded-full bg-gradient-to-b from-amber-300 to-orange-600 opacity-95 blur-[1.5px]"
+                className="ship-flame relative z-[2] mt-0.5 h-2 w-4 rounded-full opacity-95 blur-[1.5px]"
                 aria-hidden
               />
               <span className="ship-flame-extra" aria-hidden />
