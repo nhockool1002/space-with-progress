@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ProgressBarView } from "@/components/ProgressBarView";
+import { SpaceAmbience } from "@/components/SpaceAmbience";
 import { loadUiSettings, type PageUiSettings } from "@/lib/ui-settings";
 
 export default function Home() {
@@ -33,6 +34,8 @@ export default function Home() {
         className="pointer-events-none fixed inset-0 -z-10 opacity-[0.35] [background-image:radial-gradient(rgba(15,118,110,0.06)_1px,transparent_1px)] [background-size:20px_20px]"
         aria-hidden
       />
+
+      {ui?.spaceEffectsEnabled !== false ? <SpaceAmbience /> : null}
 
       <header className="border-b border-slate-200/90 bg-white/75 px-4 py-4 shadow-sm backdrop-blur-md sm:py-5">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">

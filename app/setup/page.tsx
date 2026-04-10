@@ -206,6 +206,28 @@ export default function SetupPage() {
               />
             </div>
           </div>
+          <div className="flex items-start gap-3 rounded-lg border border-slate-200 bg-sky-50/60 px-3 py-3">
+            <input
+              id="space-effects"
+              type="checkbox"
+              className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-teal-600 focus:ring-teal-500/40"
+              checked={ui.spaceEffectsEnabled}
+              onChange={(e) =>
+                setUi((u) =>
+                  u ? { ...u, spaceEffectsEnabled: e.target.checked } : u
+                )
+              }
+            />
+            <label htmlFor="space-effects" className="cursor-pointer text-sm">
+              <span className="font-medium text-slate-800">
+                Hiệu ứng nền vũ trụ nhẹ
+              </span>
+              <span className="mt-0.5 block text-xs text-slate-500">
+                Sao nhấp nháy và ánh sáng mờ trên trang chính (ảnh nền vẫn giữ).
+                Tắt nếu muốn giao diện tĩnh hơn.
+              </span>
+            </label>
+          </div>
           <div className="flex flex-wrap gap-2">
             <button
               type="button"

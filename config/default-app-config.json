@@ -1,0 +1,62 @@
+{
+  "$schemaNote": "Cấu hình mặc định khi chưa có localStorage hoặc khi khôi phục. Chỉnh file này rồi build lại / refresh.",
+  "progress": {
+    "schemaVersion": 3,
+    "activeStepIndex": 0,
+    "completedCount": 0,
+    "steps": [
+      {
+        "id": "default-step-1",
+        "time": "08:00",
+        "title": "Bắt đầu diễn tập",
+        "colorA": "#0d9488",
+        "colorB": "#e11d48"
+      },
+      {
+        "id": "default-step-2",
+        "time": "08:15 - 08:30",
+        "title": "User thực hiện đăng nhập hàng loạt",
+        "colorA": "#7c3aed",
+        "colorB": "#db2777"
+      },
+      {
+        "id": "default-step-3",
+        "time": "08:30 - 09:30",
+        "title": "User thực hiện giao dịch đồng loạt",
+        "colorA": "#2563eb",
+        "colorB": "#ea580c"
+      },
+      {
+        "id": "default-step-4",
+        "time": "09:00",
+        "title": "Giao dịch Online phát sinh",
+        "colorA": "#059669",
+        "colorB": "#dc2626"
+      },
+      {
+        "id": "default-step-5",
+        "time": "09:15 - 11:30",
+        "title": "Test tải hệ thống",
+        "colorA": "#4f46e5",
+        "colorB": "#f59e0b"
+      },
+      {
+        "id": "default-step-6",
+        "time": "11:30",
+        "title": "Kết thúc diễn tập",
+        "colorA": "#0891b2",
+        "colorB": "#be123c"
+      }
+    ]
+  },
+  "ui": {
+    "schemaVersion": 2,
+    "pageEyebrow": "Diễn tập · Progress",
+    "pageTitle": "DỰ ÁN NÂNG CẤP T24 R25",
+    "pageDescription": "DỰ ÁN NÂNG CẤP T24 R25",
+    "panelEyebrow": "Lịch diễn tập",
+    "panelTitle": "Tiến trình theo khung giờ",
+    "panelHint": "Chọn mốc (chưa hoàn thành) để tàu bay tới · dùng Hoàn thành bước để khóa tiến trình",
+    "spaceEffectsEnabled": true
+  }
+}

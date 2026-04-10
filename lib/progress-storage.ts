@@ -1,6 +1,8 @@
+import defaultAppConfig from "@/config/default-app-config.json";
+
 export const PROGRESS_STORAGE_KEY = "spaceship-progress-config";
 
-  /** Sequential completed steps; step i is done when i < completedCount */
+/** Sequential completed steps; step i is done when i < completedCount */
 export const CONFIG_SCHEMA_VERSION = 3;
 
 export type ProgressStep = {
@@ -56,56 +58,19 @@ function normalizeStep(raw: unknown): ProgressStep {
 }
 
 export function getDefaultConfig(): ProgressConfig {
-  const steps: ProgressStep[] = [
-    {
-      id: uid(),
-      time: "08:00",
-      title: "B\u1eaft \u0111\u1ea7u di\u1ec5n t\u1eadp",
-      colorA: "#0d9488",
-      colorB: "#e11d48",
-    },
-    {
-      id: uid(),
-      time: "08:15 - 08:30",
-      title: "User th\u1ef1c hi\u1ec7n \u0111\u0103ng nh\u1eadp h\u00e0ng lo\u1ea1t",
-      colorA: "#7c3aed",
-      colorB: "#db2777",
-    },
-    {
-      id: uid(),
-      time: "08:30 - 09:30",
-      title: "User th\u1ef1c hi\u1ec7n giao d\u1ecbch \u0111\u1ed3ng lo\u1ea1t",
-      colorA: "#2563eb",
-      colorB: "#ea580c",
-    },
-    {
-      id: uid(),
-      time: "09:00",
-      title: "Giao d\u1ecbch Online ph\u00e1t sinh",
-      colorA: "#059669",
-      colorB: "#dc2626",
-    },
-    {
-      id: uid(),
-      time: "09:15 - 11:30",
-      title: "Test t\u1ea3i h\u1ec7 th\u1ed1ng",
-      colorA: "#4f46e5",
-      colorB: "#f59e0b",
-    },
-    {
-      id: uid(),
-      time: "11:30",
-      title: "K\u1ebft th\u00fac di\u1ec5n t\u1eadp",
-      colorA: "#0891b2",
-      colorB: "#be123c",
-    },
-  ];
-  return {
-    schemaVersion: CONFIG_SCHEMA_VERSION,
+  const p = defaultAppConfig.progress;
+  const steps: ProgressStep[] = p.steps.map((s) => ({
+    id: String(s.id),
+    time: String(s.time ?? ""),
+    title: String(s.title ?? ""),
+    colorA: String(s.colorA ?? "#22c55e"),
+    colorB: String(s.colorB ?? "#ef4444"),
+  }));
+  return clampConfig(
     steps,
-    activeStepIndex: 0,
-    completedCount: 0,
-  };
+    typeof p.activeStepIndex === "number" ? p.activeStepIndex : 0,
+    typeof p.completedCount === "number" ? p.completedCount : 0
+  );
 }
 
 function clampConfig(
