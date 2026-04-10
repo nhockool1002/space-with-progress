@@ -12,15 +12,72 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Lớp phủ nhấp nháy tinh tế trên thẻ (opacity thấp, không lấn nền tối) */
+@keyframes step-card-tint {
+  0%,
+  100% {
+    background-color: var(--c-a);
+  }
+  50% {
+    background-color: var(--c-b);
+  }
+}
+
+.step-card-tint {
+  animation: step-card-tint 2.6s ease-in-out infinite;
+}
+
+/* Tàu: rung nhẹ + lắc khi bay */
+@keyframes ship-drift {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(1deg);
+  }
+}
+
+.ship-motion {
+  animation: ship-drift 2.2s ease-in-out infinite;
+}
+
+@keyframes flame-pulse {
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: scaleX(1) scaleY(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1.15) scaleY(1.25);
+  }
+}
+
+.ship-flame {
+  animation: flame-pulse 0.35s ease-in-out infinite;
+}
+
+@keyframes track-done-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(52, 211, 153, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(52, 211, 153, 0.55);
+  }
+}
+
+.track-segment-done {
+  animation: track-done-pulse 2.2s ease-in-out infinite;
+}
+
+.track-fill-done {
+  animation: track-done-pulse 2.5s ease-in-out infinite;
 }
