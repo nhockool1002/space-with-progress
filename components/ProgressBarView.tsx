@@ -13,10 +13,19 @@ type Props = {
 };
 
 export function ProgressBarView({ refreshKey = 0 }: Props) {
+  const SHIP_TURN_MS = 320;
+  const SHIP_MOVE_MS = 1750;
   const [config, setConfig] = useState<ProgressConfig | null>(null);
   const [ui, setUi] = useState<PageUiSettings | null>(null);
   const [shipThrust, setShipThrust] = useState(false);
+  const [shipFacing, setShipFacing] = useState<"forward" | "backward">(
+    "forward"
+  );
+  const [isShipManeuvering, setIsShipManeuvering] = useState(false);
   const prevActiveStepRef = useRef<number | null>(null);
+  const turnTimerRef = useRef<number | null>(null);
+  const moveTimerRef = useRef<number | null>(null);
+  const restoreTimerRef = useRef<number | null>(null);
 
   const refresh = useCallback(() => {
     setConfig(loadConfig());
@@ -41,17 +50,71 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
     return () => window.clearTimeout(t);
   }, [config]);
 
-  const selectStep = useCallback((index: number) => {
-    setConfig((c) => {
-      if (!c || index < 0 || index >= c.steps.length) return c;
-      if (index < c.completedCount) return c;
-      const next = { ...c, activeStepIndex: index };
-      saveConfig(next);
-      return next;
-    });
+  const clearShipTimers = useCallback(() => {
+    if (turnTimerRef.current !== null) {
+      window.clearTimeout(turnTimerRef.current);
+      turnTimerRef.current = null;
+    }
+    if (moveTimerRef.current !== null) {
+      window.clearTimeout(moveTimerRef.current);
+      moveTimerRef.current = null;
+    }
+    if (restoreTimerRef.current !== null) {
+      window.clearTimeout(restoreTimerRef.current);
+      restoreTimerRef.current = null;
+    }
   }, []);
 
+  useEffect(() => {
+    return () => {
+      clearShipTimers();
+    };
+  }, [clearShipTimers]);
+
+  const selectStep = useCallback((index: number) => {
+    if (!config || isShipManeuvering) return;
+    if (index < 0 || index >= config.steps.length) return;
+    if (index < config.completedCount || index === config.activeStepIndex) return;
+
+    const isBackwardMove = index < config.activeStepIndex;
+    if (!isBackwardMove) {
+      setShipFacing("forward");
+      setConfig((c) => {
+        if (!c || index < 0 || index >= c.steps.length) return c;
+        if (index < c.completedCount) return c;
+        const next = { ...c, activeStepIndex: index };
+        saveConfig(next);
+        return next;
+      });
+      return;
+    }
+
+    clearShipTimers();
+    setIsShipManeuvering(true);
+    setShipThrust(true);
+    setShipFacing("backward");
+
+    turnTimerRef.current = window.setTimeout(() => {
+      setConfig((c) => {
+        if (!c || index < 0 || index >= c.steps.length) return c;
+        if (index < c.completedCount) return c;
+        const next = { ...c, activeStepIndex: index };
+        saveConfig(next);
+        return next;
+      });
+
+      moveTimerRef.current = window.setTimeout(() => {
+        setShipFacing("forward");
+        restoreTimerRef.current = window.setTimeout(() => {
+          setShipThrust(false);
+          setIsShipManeuvering(false);
+        }, SHIP_TURN_MS);
+      }, SHIP_MOVE_MS);
+    }, SHIP_TURN_MS);
+  }, [SHIP_MOVE_MS, SHIP_TURN_MS, clearShipTimers, config, isShipManeuvering]);
+
   const completeStep = useCallback(() => {
+    if (isShipManeuvering) return;
     setConfig((c) => {
       if (!c) return c;
       const n = c.steps.length;
@@ -63,16 +126,21 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
       saveConfig(next);
       return next;
     });
-  }, []);
+  }, [isShipManeuvering]);
 
   const resetProgress = useCallback(() => {
+    if (isShipManeuvering) return;
+    clearShipTimers();
+    setShipFacing("forward");
+    setShipThrust(false);
+    setIsShipManeuvering(false);
     setConfig((c) => {
       if (!c) return c;
       const next = { ...c, completedCount: 0, activeStepIndex: 0 };
       saveConfig(next);
       return next;
     });
-  }, []);
+  }, [clearShipTimers, isShipManeuvering]);
 
   if (!config || !ui) {
     return (
@@ -126,7 +194,7 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
               <button
                 type="button"
                 onClick={completeStep}
-                disabled={!canComplete}
+                disabled={!canComplete || isShipManeuvering}
                 className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {"Ho\u00e0n th\u00e0nh b\u01b0\u1edbc"}
@@ -134,6 +202,7 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
               <button
                 type="button"
                 onClick={resetProgress}
+                disabled={isShipManeuvering}
                 className="rounded-lg border border-slate-300 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
               >
                 {"Reset ti\u1ebfn \u0111\u1ed9"}
@@ -202,9 +271,10 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
                   <button
                     type="button"
                     onClick={() => selectStep(i)}
+                    disabled={isShipManeuvering}
                     aria-label={`Mốc ${i + 1}: ${getStepSummary(step)}`}
                     aria-current={isActive ? "step" : undefined}
-                    className="flex cursor-pointer items-center justify-center outline-none"
+                    className="flex cursor-pointer items-center justify-center outline-none disabled:cursor-not-allowed"
                   >
                     <span
                       className={
@@ -225,60 +295,69 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
             style={{
               left: `${shipLeftPercent}%`,
               transition:
-                "left 1.15s cubic-bezier(0.34, 1.12, 0.64, 1), transform 0.5s ease",
+                `left ${SHIP_MOVE_MS}ms cubic-bezier(0.34, 1.12, 0.64, 1), transform 0.5s ease`,
             }}
           >
             <div
               className={
-                "ship-thrust-wrap ship-motion relative flex rotate-90 flex-col items-center " +
-                (shipThrust ? "ship-thrust-active" : "")
-              }
-              style={
-                {
-                  "--flame-a": ui.flameColorA,
-                  "--flame-b": ui.flameColorB,
-                } as CSSProperties
+                "ship-facing-wrap relative flex flex-col items-center " +
+                (shipFacing === "backward"
+                  ? "ship-facing-backward"
+                  : "ship-facing-forward")
               }
             >
-              <span className="ship-fire-bloom" aria-hidden />
-              <span className="ship-smoke ship-smoke-1" aria-hidden />
-              <span className="ship-smoke ship-smoke-2" aria-hidden />
-              <span className="ship-smoke ship-smoke-3" aria-hidden />
-              <span className="ship-smoke ship-smoke-4" aria-hidden />
-              <span className="ship-smoke ship-smoke-5" aria-hidden />
-              <span className="ship-smoke ship-smoke-6" aria-hidden />
-              <span className="ship-smoke-dark ship-smoke-d1" aria-hidden />
-              <span className="ship-smoke-dark ship-smoke-d2" aria-hidden />
-              <span className="ship-spark ship-spark-1" aria-hidden />
-              <span className="ship-spark ship-spark-2" aria-hidden />
-              <span className="ship-spark ship-spark-3" aria-hidden />
-              <span className="ship-spark ship-spark-4" aria-hidden />
-              <span className="ship-fire-glow" aria-hidden />
-              <Image
-                src={ui.spaceshipImage || "/spaceship.png"}
-                alt=""
-                width={56}
-                height={56}
-                className="ship-thrust-glow-target relative z-[2] h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
-                priority
-              />
               <div
-                className="ship-tail-streaks pointer-events-none relative z-[1] mt-0.5 h-8 w-16 shrink-0 sm:h-9 sm:w-[4.5rem]"
-                aria-hidden
+                className={
+                  "ship-thrust-wrap ship-motion relative flex flex-col items-center " +
+                  (shipThrust ? "ship-thrust-active" : "")
+                }
+                style={
+                  {
+                    "--flame-a": ui.flameColorA,
+                    "--flame-b": ui.flameColorB,
+                  } as CSSProperties
+                }
               >
-                <span className="ship-tail-streak ship-tail-streak-1" />
-                <span className="ship-tail-streak ship-tail-streak-2" />
-                <span className="ship-tail-streak ship-tail-streak-3" />
-                <span className="ship-tail-streak ship-tail-streak-4" />
-                <span className="ship-tail-streak ship-tail-streak-5" />
+                <span className="ship-fire-bloom" aria-hidden />
+                <span className="ship-smoke ship-smoke-1" aria-hidden />
+                <span className="ship-smoke ship-smoke-2" aria-hidden />
+                <span className="ship-smoke ship-smoke-3" aria-hidden />
+                <span className="ship-smoke ship-smoke-4" aria-hidden />
+                <span className="ship-smoke ship-smoke-5" aria-hidden />
+                <span className="ship-smoke ship-smoke-6" aria-hidden />
+                <span className="ship-smoke-dark ship-smoke-d1" aria-hidden />
+                <span className="ship-smoke-dark ship-smoke-d2" aria-hidden />
+                <span className="ship-spark ship-spark-1" aria-hidden />
+                <span className="ship-spark ship-spark-2" aria-hidden />
+                <span className="ship-spark ship-spark-3" aria-hidden />
+                <span className="ship-spark ship-spark-4" aria-hidden />
+                <span className="ship-fire-glow" aria-hidden />
+                <Image
+                  src={ui.spaceshipImage || "/spaceship.png"}
+                  alt=""
+                  width={56}
+                  height={56}
+                  className="ship-thrust-glow-target relative z-[2] h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
+                  priority
+                />
+                <div
+                  className="ship-tail-streaks pointer-events-none relative z-[1] mt-0.5 h-8 w-16 shrink-0 sm:h-9 sm:w-[4.5rem]"
+                  aria-hidden
+                >
+                  <span className="ship-tail-streak ship-tail-streak-1" />
+                  <span className="ship-tail-streak ship-tail-streak-2" />
+                  <span className="ship-tail-streak ship-tail-streak-3" />
+                  <span className="ship-tail-streak ship-tail-streak-4" />
+                  <span className="ship-tail-streak ship-tail-streak-5" />
+                </div>
+                <span
+                  className="ship-flame relative z-[2] mt-0.5 h-2 w-4 rounded-full opacity-95 blur-[1.5px]"
+                  aria-hidden
+                />
+                <span className="ship-flame-extra" aria-hidden />
+                <span className="ship-fire-core" aria-hidden />
+                <span className="ship-fire-plume" aria-hidden />
               </div>
-              <span
-                className="ship-flame relative z-[2] mt-0.5 h-2 w-4 rounded-full opacity-95 blur-[1.5px]"
-                aria-hidden
-              />
-              <span className="ship-flame-extra" aria-hidden />
-              <span className="ship-fire-core" aria-hidden />
-              <span className="ship-fire-plume" aria-hidden />
             </div>
           </div>
         </div>

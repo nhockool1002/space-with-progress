@@ -65,6 +65,20 @@ body {
   animation: ship-drift 2.2s ease-in-out infinite;
 }
 
+.ship-facing-wrap {
+  transform: rotate(90deg);
+  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+
+.ship-facing-wrap.ship-facing-forward {
+  transform: rotate(90deg);
+}
+
+.ship-facing-wrap.ship-facing-backward {
+  transform: rotate(-90deg);
+}
+
 @keyframes flame-pulse {
   0%,
   100% {
