@@ -16,6 +16,7 @@ import {
   saveUiSettings,
   type PageUiSettings,
 } from "@/lib/ui-settings";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 function newStep(): ProgressStep {
   return {
@@ -96,41 +97,44 @@ export default function SetupPage() {
 
   if (!config || !ui) {
     return (
-      <div className="flex min-h-0 flex-1 items-center justify-center text-slate-500">
+      <div className="flex min-h-0 flex-1 items-center justify-center text-slate-500 dark:text-slate-400">
         {"\u0110ang t\u1ea3i\u2026"}
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col bg-slate-50 text-slate-900">
-      <header className="border-b border-slate-200/90 bg-white/90 px-4 py-4 shadow-sm backdrop-blur-sm">
+    <div className="flex min-h-0 flex-1 flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+      <header className="border-b border-slate-200/90 bg-white/90 px-4 py-4 shadow-sm backdrop-blur-sm dark:border-slate-700/90 dark:bg-slate-900/90">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-3">
-          <h1 className="text-lg font-semibold tracking-tight text-slate-900">
+          <h1 className="text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-50">
             Cấu hình Progress bar
           </h1>
-          <Link
-            href="/"
-            className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
-          >
-            ← Trang chính
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            <ThemeToggle size="compact" />
+            <Link
+              href="/"
+              className="rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+            >
+              ← Trang chính
+            </Link>
+          </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl space-y-8 px-4 py-8">
-        <section className="space-y-4 rounded-xl border border-slate-200/90 bg-white/90 p-4 shadow-sm">
-          <h2 className="text-sm font-semibold text-slate-800">
+      <main className="mx-auto max-w-3xl space-y-8 px-4 py-8 [&_input]:dark:border-slate-600 [&_input]:dark:bg-slate-900 [&_input]:dark:text-slate-100 [&_select]:dark:border-slate-600 [&_select]:dark:bg-slate-900 [&_select]:dark:text-slate-100 [&_textarea]:dark:border-slate-600 [&_textarea]:dark:bg-slate-900 [&_textarea]:dark:text-slate-100">
+        <section className="space-y-4 rounded-xl border border-slate-200/90 bg-white/90 p-4 shadow-sm dark:border-slate-600/90 dark:bg-slate-900/80">
+          <h2 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
             Nội dung trang chính & panel
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             {
               "C\u00e1c d\u00f2ng ch\u1eef hi\u1ec3n th\u1ecb \u1edf header v\u00e0 kh\u1ed1i l\u1ecbch; ch\u1ec9nh b\u1ea5t c\u1ee9 l\u00fac n\u00e0o."
             }
           </p>
           <div className="grid gap-3">
             <div>
-              <label className="mb-1 block text-xs text-slate-600">
+              <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
                 Phụ đề header (eyebrow)
               </label>
               <input
@@ -142,7 +146,7 @@ export default function SetupPage() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs text-slate-600">
+              <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
                 Tiêu đề header
               </label>
               <input
@@ -154,7 +158,7 @@ export default function SetupPage() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs text-slate-600">
+              <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
                 Mô tả header
               </label>
               <textarea
@@ -169,7 +173,7 @@ export default function SetupPage() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs text-slate-600">
+              <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
                 Phụ đề panel (lịch)
               </label>
               <input
@@ -181,7 +185,7 @@ export default function SetupPage() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs text-slate-600">
+              <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
                 Tiêu đề panel
               </label>
               <input
@@ -193,7 +197,7 @@ export default function SetupPage() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs text-slate-600">
+              <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
                 {"G\u1ee3i \u00fd panel (d\u00f2ng nh\u1ecf)"}
               </label>
               <textarea
@@ -206,11 +210,11 @@ export default function SetupPage() {
               />
             </div>
           </div>
-          <div className="flex items-start gap-3 rounded-lg border border-slate-200 bg-sky-50/60 px-3 py-3">
+          <div className="flex items-start gap-3 rounded-lg border border-slate-200 bg-sky-50/60 px-3 py-3 dark:border-slate-600 dark:bg-sky-950/40">
             <input
               id="space-effects"
               type="checkbox"
-              className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-teal-600 focus:ring-teal-500/40"
+              className="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-teal-600 focus:ring-teal-500/40 dark:border-slate-500"
               checked={ui.spaceEffectsEnabled}
               onChange={(e) =>
                 setUi((u) =>
@@ -219,10 +223,10 @@ export default function SetupPage() {
               }
             />
             <label htmlFor="space-effects" className="cursor-pointer text-sm">
-              <span className="font-medium text-slate-800">
+              <span className="font-medium text-slate-800 dark:text-slate-100">
                 Hiệu ứng nền vũ trụ nhẹ
               </span>
-              <span className="mt-0.5 block text-xs text-slate-500">
+              <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
                 Sao nhấp nháy và ánh sáng mờ trên trang chính (ảnh nền vẫn giữ).
                 Tắt nếu muốn giao diện tĩnh hơn.
               </span>
@@ -239,27 +243,27 @@ export default function SetupPage() {
             <button
               type="button"
               onClick={resetUiDefaults}
-              className="rounded-lg border border-slate-300 bg-slate-50 px-4 py-2 text-sm text-slate-600 hover:bg-slate-100"
+              className="rounded-lg border border-slate-300 bg-slate-50 px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
             >
               Khôi phục chữ mặc định
             </button>
           </div>
           {savedUiAt != null && (
-            <p className="text-xs text-teal-700">
+            <p className="text-xs text-teal-700 dark:text-teal-400">
               {"\u0110\u00e3 l\u01b0u n\u1ed9i dung l\u00fac"}{" "}
               {new Date(savedUiAt).toLocaleTimeString("vi-VN")}
             </p>
           )}
         </section>
 
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-slate-600 dark:text-slate-300">
           {
             "Ch\u1ec9nh khung gi\u1edd, n\u1ed9i dung v\u00e0 m\u00e0u nh\u1ea5p nh\u00e1y. Ti\u1ebfn \u0111\u1ed9 ho\u00e0n th\u00e0nh do n\u00fat tr\u00ean trang ch\u00ednh; \u1edf \u0111\u00e2y c\u00f3 th\u1ec3 \u0111\u1eb7t b\u01b0\u1edbc \u0111ang ch\u1ecdn."
           }
         </p>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-slate-800">
+          <label className="block text-sm font-medium text-slate-800 dark:text-slate-100">
             {"B\u01b0\u1edbc \u0111ang active (t\u00e0u)"}
           </label>
           <select
@@ -278,7 +282,7 @@ export default function SetupPage() {
               </option>
             ))}
           </select>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             {"\u0110\u00e3 ho\u00e0n th\u00e0nh tu\u1ea7n t\u1ef1:"}{" "}
             {config.completedCount}/{config.steps.length}
             {
@@ -291,10 +295,10 @@ export default function SetupPage() {
           {config.steps.map((step, index) => (
             <li
               key={step.id}
-              className="rounded-xl border border-slate-200/90 bg-white p-4 shadow-sm"
+              className="rounded-xl border border-slate-200/90 bg-white p-4 shadow-sm dark:border-slate-600/90 dark:bg-slate-900/80"
             >
               <div className="mb-3 flex items-center justify-between gap-2">
-                <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                <span className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
                   {"B\u01b0\u1edbc"} {index + 1}
                   {index < config.completedCount ? (
                     <span className="ml-2 text-emerald-600">· đã xong</span>
@@ -302,7 +306,7 @@ export default function SetupPage() {
                 </span>
                 <button
                   type="button"
-                  className="rounded-md px-2 py-1 text-xs text-red-600 hover:bg-red-50 disabled:opacity-40"
+                  className="rounded-md px-2 py-1 text-xs text-red-600 hover:bg-red-50 disabled:opacity-40 dark:text-red-400 dark:hover:bg-red-950/50"
                   onClick={() => removeStep(index)}
                   disabled={config.steps.length <= 1}
                 >
@@ -311,7 +315,7 @@ export default function SetupPage() {
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-xs text-slate-600">
+                  <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
                     {"Khung gi\u1edd"}
                   </label>
                   <input
@@ -324,7 +328,7 @@ export default function SetupPage() {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs text-slate-600">
+                  <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
                     Nội dung
                   </label>
                   <input
@@ -337,7 +341,7 @@ export default function SetupPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-2 sm:col-span-2 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1 block text-xs text-slate-600">
+                    <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
                       Màu A
                     </label>
                     <input
@@ -350,7 +354,7 @@ export default function SetupPage() {
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs text-slate-600">
+                    <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
                       Màu B
                     </label>
                     <input
@@ -372,7 +376,7 @@ export default function SetupPage() {
           <button
             type="button"
             onClick={addStep}
-            className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+            className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
           >
             {"+ Th\u00eam b\u01b0\u1edbc"}
           </button>
@@ -386,14 +390,14 @@ export default function SetupPage() {
           <button
             type="button"
             onClick={resetDefaults}
-            className="rounded-lg border border-slate-300 bg-slate-50 px-4 py-2 text-sm text-slate-600 hover:bg-slate-100"
+            className="rounded-lg border border-slate-300 bg-slate-50 px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
           >
             Khôi phục mặc định (6 mốc + tiến độ 0)
           </button>
         </div>
 
         {savedAt != null && (
-          <p className="text-sm text-emerald-700">
+          <p className="text-sm text-emerald-700 dark:text-emerald-400">
             {"\u0110\u00e3 l\u01b0u b\u01b0\u1edbc l\u00fac"}{" "}
             {new Date(savedAt).toLocaleTimeString("vi-VN")}
           </p>

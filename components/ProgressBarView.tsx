@@ -76,7 +76,7 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
 
   if (!config || !ui) {
     return (
-      <div className="text-sm text-slate-500">
+      <div className="text-sm text-slate-500 dark:text-slate-400">
         {"\u0110ang t\u1ea3i\u2026"}
       </div>
     );
@@ -108,18 +108,18 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
 
   return (
     <div className="w-full max-w-6xl space-y-6">
-      <div className="overflow-hidden rounded-[1.75rem] border border-slate-200/80 bg-white p-4 shadow-[0_24px_60px_-12px_rgba(15,23,42,0.2),inset_0_1px_0_rgba(255,255,255,1)] sm:p-6">
-        <div className="mb-3 flex flex-wrap items-end justify-between gap-3 border-b border-slate-200/80 pb-3">
+      <div className="overflow-hidden rounded-[1.75rem] border border-slate-200/80 bg-white p-4 shadow-[0_24px_60px_-12px_rgba(15,23,42,0.2),inset_0_1px_0_rgba(255,255,255,1)] dark:border-slate-600/90 dark:bg-slate-900 dark:shadow-[0_24px_60px_-12px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.06)] sm:p-6">
+        <div className="mb-3 flex flex-wrap items-end justify-between gap-3 border-b border-slate-200/80 pb-3 dark:border-slate-600/80">
           <div>
-            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-teal-600">
+            <p className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-teal-600 dark:text-teal-400">
               {ui.panelEyebrow}
             </p>
-            <h2 className="mt-0.5 text-base font-semibold tracking-tight text-slate-900 sm:text-lg">
+            <h2 className="mt-0.5 text-base font-semibold tracking-tight text-slate-900 dark:text-slate-50 sm:text-lg">
               {ui.panelTitle}
             </h2>
           </div>
           <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
-            <p className="max-w-[20rem] text-right text-[0.65rem] leading-snug text-slate-500">
+            <p className="max-w-[20rem] text-right text-[0.65rem] leading-snug text-slate-500 dark:text-slate-400">
               {ui.panelHint}
             </p>
             <div className="flex flex-wrap justify-end gap-2">
@@ -134,7 +134,7 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
               <button
                 type="button"
                 onClick={resetProgress}
-                className="rounded-lg border border-slate-300 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-100"
+                className="rounded-lg border border-slate-300 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
               >
                 {"Reset ti\u1ebfn \u0111\u1ed9"}
               </button>
@@ -142,20 +142,28 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
           </div>
         </div>
 
-        <div className="relative z-30 mb-4 rounded-xl border border-sky-300/90 bg-sky-100 px-4 py-2.5 text-center shadow-sm">
-          <p className="text-[0.7rem] font-medium leading-relaxed text-slate-800">
-            {"\u0110\u00e3 ho\u00e0n th\u00e0nh"}{" "}
-            <span className="font-mono font-semibold text-emerald-600">
-              {completedCount}
-            </span>
-            <span className="text-slate-500">/{n}</span>
-            {" \u00b7 Ch\u1ecdn t\u1edbi m\u1ed1c ch\u01b0a kh\u00f3a"}
+        <div className="relative z-30 mb-4 rounded-xl border border-sky-300/90 bg-sky-100 px-4 py-2.5 text-center shadow-sm dark:border-sky-700/80 dark:bg-sky-950/60 dark:shadow-sky-950/20">
+          <p className="text-[0.7rem] font-medium leading-relaxed text-slate-800 dark:text-slate-200">
+            {allDone ? (
+              <span className="font-semibold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
+                {"HO\u00c0N TH\u00c0NH M\u1ee4C TI\u00caU"}
+              </span>
+            ) : (
+              <>
+                {"\u0110\u00e3 ho\u00e0n th\u00e0nh"}{" "}
+                <span className="font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                  {completedCount}
+                </span>
+                <span className="text-slate-500 dark:text-slate-400">/{n}</span>
+                {" \u00b7 Ch\u1ecdn t\u1edbi m\u1ed1c ch\u01b0a kh\u00f3a"}
+              </>
+            )}
           </p>
         </div>
 
         <div className="relative z-0 mb-6 min-h-[5.25rem] isolate px-1 pb-12 pt-1 sm:min-h-[5.75rem] sm:px-2">
           <div
-            className="pointer-events-none absolute left-[4%] right-[4%] top-[60%] h-3.5 -translate-y-1/2 overflow-hidden rounded-full border border-slate-300 bg-slate-200 shadow-[inset_0_2px_8px_rgba(15,23,42,0.12)]"
+            className="pointer-events-none absolute left-[4%] right-[4%] top-[60%] h-3.5 -translate-y-1/2 overflow-hidden rounded-full border border-slate-300 bg-slate-200 shadow-[inset_0_2px_8px_rgba(15,23,42,0.12)] dark:border-slate-600 dark:bg-slate-800 dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
             aria-hidden
           >
             <div
@@ -167,7 +175,7 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
             />
           </div>
           <div
-            className="pointer-events-none absolute left-[4%] right-[4%] top-[60%] h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-slate-400/40 to-transparent"
+            className="pointer-events-none absolute left-[4%] right-[4%] top-[60%] h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-slate-400/40 to-transparent dark:via-slate-500/25"
             aria-hidden
           />
 
@@ -182,7 +190,7 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
               >
                 {done ? (
                   <span
-                    className="flex h-4 w-4 items-center justify-center rounded-full border-2 border-emerald-500 bg-emerald-100 text-[0.55rem] font-bold leading-none text-emerald-800 shadow-[0_0_10px_rgba(52,211,153,0.35)]"
+                    className="flex h-4 w-4 items-center justify-center rounded-full border-2 border-emerald-500 bg-emerald-100 text-[0.55rem] font-bold leading-none text-emerald-800 shadow-[0_0_10px_rgba(52,211,153,0.35)] dark:border-emerald-400 dark:bg-emerald-950/80 dark:text-emerald-200"
                     aria-hidden
                   >
                     {"\u2713"}
@@ -197,10 +205,10 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
                   >
                     <span
                       className={
-                        "h-3.5 w-3.5 rounded-full border-2 bg-white shadow-md transition-all duration-300 " +
+                        "h-3.5 w-3.5 rounded-full border-2 bg-white shadow-md transition-all duration-300 dark:bg-slate-800 " +
                         (isActive
-                          ? "scale-125 border-amber-400 bg-amber-100 shadow-amber-200/80"
-                          : "border-slate-400 hover:border-teal-500 hover:bg-teal-50/80")
+                          ? "scale-125 border-amber-400 bg-amber-100 shadow-amber-200/80 dark:bg-amber-950/60 dark:shadow-amber-900/40"
+                          : "border-slate-400 hover:border-teal-500 hover:bg-teal-50/80 dark:border-slate-500 dark:hover:border-teal-400 dark:hover:bg-teal-950/40")
                       }
                     />
                   </button>
@@ -219,7 +227,7 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
           >
             <div
               className={
-                "ship-thrust-wrap ship-motion relative flex flex-col items-center " +
+                "ship-thrust-wrap ship-motion relative flex rotate-90 flex-col items-center " +
                 (shipThrust ? "ship-thrust-active" : "")
               }
             >
@@ -242,11 +250,11 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
                 alt=""
                 width={56}
                 height={56}
-                className="ship-thrust-glow-target relative z-[2] h-12 w-12 rotate-90 object-contain drop-shadow-[0_0_18px_rgba(251,146,60,0.65)] sm:h-14 sm:w-14"
+                className="ship-thrust-glow-target relative z-[2] h-12 w-12 shrink-0 object-contain drop-shadow-[0_0_18px_rgba(251,146,60,0.65)] sm:h-14 sm:w-14"
                 priority
               />
               <div
-                className="ship-tail-streaks pointer-events-none relative z-[1] -mt-1 h-8 w-16 shrink-0 sm:h-9 sm:w-[4.5rem]"
+                className="ship-tail-streaks pointer-events-none relative z-[1] mt-0.5 h-8 w-16 shrink-0 sm:h-9 sm:w-[4.5rem]"
                 aria-hidden
               >
                 <span className="ship-tail-streak ship-tail-streak-1" />
@@ -256,7 +264,7 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
                 <span className="ship-tail-streak ship-tail-streak-5" />
               </div>
               <span
-                className="ship-flame relative z-[2] -mt-6 h-2 w-4 rounded-full bg-gradient-to-b from-amber-300 to-orange-600 opacity-95 blur-[1.5px] sm:-mt-7"
+                className="ship-flame relative z-[2] mt-0.5 h-2 w-4 rounded-full bg-gradient-to-b from-amber-300 to-orange-600 opacity-95 blur-[1.5px]"
                 aria-hidden
               />
               <span className="ship-flame-extra" aria-hidden />
@@ -290,29 +298,29 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
                     aria-hidden
                   />
                 )}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/28 to-transparent" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/28 to-transparent dark:from-white/[0.07]" />
                 <div className="relative flex min-h-0 flex-col gap-1.5 p-2.5 sm:p-3">
                   <div className="flex items-start justify-between gap-2">
-                    <span className="font-mono text-[0.65rem] font-medium leading-tight tracking-wide text-teal-700">
+                    <span className="font-mono text-[0.65rem] font-medium leading-tight tracking-wide text-teal-700 dark:text-teal-400">
                       {step.time || "—"}
                     </span>
                     <span
                       className={
                         "shrink-0 rounded px-1 py-0.5 font-mono text-[0.55rem] tabular-nums " +
                         (done
-                          ? "bg-emerald-100 text-emerald-800"
+                          ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-200"
                           : isActive
-                            ? "bg-amber-100 text-amber-900"
-                            : "bg-slate-100 text-slate-600")
+                            ? "bg-amber-100 text-amber-900 dark:bg-amber-950/60 dark:text-amber-200"
+                            : "bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300")
                       }
                     >
                       {done ? "\u2713" : String(i + 1).padStart(2, "0")}
                     </span>
                   </div>
-                  <p className="text-left text-[0.78rem] font-normal leading-snug text-slate-800 sm:text-[0.82rem]">
+                  <p className="text-left text-[0.78rem] font-normal leading-snug text-slate-800 dark:text-slate-100 sm:text-[0.82rem]">
                     {step.title}
                   </p>
-                  <p className="text-[0.55rem] text-slate-500">
+                  <p className="text-[0.55rem] text-slate-500 dark:text-slate-400">
                     Mốc {i + 1}/{n}
                     {done ? " \u00b7 \u0110\u00e3 xong" : ""}
                   </p>
@@ -323,10 +331,10 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
             const cardClass =
               "group relative flex min-h-[5.75rem] flex-col overflow-hidden rounded-xl border text-left outline-none transition " +
               (done
-                ? "cursor-not-allowed border-emerald-300 bg-emerald-100 "
-                : "border-slate-300/90 bg-white hover:border-slate-400 focus-visible:ring-2 focus-visible:ring-teal-500/70 ") +
+                ? "cursor-not-allowed border-emerald-300 bg-emerald-100 dark:border-emerald-700 dark:bg-emerald-950/35 "
+                : "border-slate-300/90 bg-white hover:border-slate-400 focus-visible:ring-2 focus-visible:ring-teal-500/70 dark:border-slate-600 dark:bg-slate-800/90 dark:hover:border-slate-500 dark:focus-visible:ring-teal-400/50 ") +
               (isActive && !done
-                ? "ring-2 ring-amber-400 shadow-md shadow-amber-200/90 "
+                ? "ring-2 ring-amber-400 shadow-md shadow-amber-200/90 dark:shadow-amber-950/40 "
                 : "");
 
             if (done) {
@@ -357,11 +365,11 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-center shadow-md shadow-slate-900/8 sm:px-5">
-        <p className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-slate-600">
+      <div className="rounded-2xl border border-slate-200/80 bg-white px-4 py-3 text-center shadow-md shadow-slate-900/8 dark:border-slate-600 dark:bg-slate-900 dark:shadow-black/25 sm:px-5">
+        <p className="text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-slate-600 dark:text-slate-400">
           {"B\u01b0\u1edbc hi\u1ec7n t\u1ea1i"}
         </p>
-        <p className="mt-1.5 text-sm font-medium leading-snug text-slate-900 sm:text-base">
+        <p className="mt-1.5 text-sm font-medium leading-snug text-slate-900 dark:text-slate-100 sm:text-base">
           {allDone ? (
             <span className="text-emerald-600">
               {"\u0110\u00e3 ho\u00e0n th\u00e0nh to\u00e0n b\u1ed9 l\u1ecbch"}
@@ -369,7 +377,7 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
           ) : active ? (
             <>
               {active.time && (
-                <span className="mr-2 font-mono text-xs text-teal-700 sm:text-sm">
+                <span className="mr-2 font-mono text-xs text-teal-700 dark:text-teal-400 sm:text-sm">
                   {active.time}
                 </span>
               )}
@@ -379,7 +387,7 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
             "—"
           )}
         </p>
-        <p className="mt-1 text-[0.65rem] text-slate-500">
+        <p className="mt-1 text-[0.65rem] text-slate-500 dark:text-slate-400">
           {activeStepIndex + 1} / {n}
         </p>
       </div>
