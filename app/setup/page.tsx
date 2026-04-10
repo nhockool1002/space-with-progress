@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   getDefaultConfig,
   loadConfig,
@@ -26,6 +26,50 @@ function newStep(): ProgressStep {
     colorA: "#22c55e",
     colorB: "#ef4444",
   };
+}
+
+type StepValidation = {
+  timeError: string | null;
+  titleError: string | null;
+};
+
+const TIME_SINGLE_RE = /^([01]\d|2[0-3]):([0-5]\d)$/;
+const TIME_RANGE_RE =
+  /^([01]\d|2[0-3]):([0-5]\d)\s*-\s*([01]\d|2[0-3]):([0-5]\d)$/;
+const MAX_TITLE_LENGTH = 120;
+
+function toMinutes(hh: string, mm: string): number {
+  return Number(hh) * 60 + Number(mm);
+}
+
+function validateStep(step: ProgressStep): StepValidation {
+  const time = step.time.trim();
+  const title = step.title.trim();
+
+  let timeError: string | null = null;
+  if (time) {
+    if (TIME_SINGLE_RE.test(time)) {
+      timeError = null;
+    } else {
+      const m = time.match(TIME_RANGE_RE);
+      if (!m) {
+        timeError = "Khung giờ phải là HH:mm hoặc HH:mm - HH:mm (ví dụ 08:15 - 09:30).";
+      } else {
+        const start = toMinutes(m[1], m[2]);
+        const end = toMinutes(m[3], m[4]);
+        if (end <= start) timeError = "Giờ kết thúc phải lớn hơn giờ bắt đầu.";
+      }
+    }
+  }
+
+  let titleError: string | null = null;
+  if (!title) {
+    titleError = "Nội dung bước không được để trống.";
+  } else if (title.length > MAX_TITLE_LENGTH) {
+    titleError = `Nội dung quá dài (${title.length}/${MAX_TITLE_LENGTH}).`;
+  }
+
+  return { timeError, titleError };
 }
 
 export default function SetupPage() {
@@ -77,6 +121,11 @@ export default function SetupPage() {
 
   const handleSave = useCallback(() => {
     if (!config) return;
+    const hasInvalid = config.steps.some((s) => {
+      const v = validateStep(s);
+      return Boolean(v.timeError || v.titleError);
+    });
+    if (hasInvalid) return;
     saveConfig(config);
     setSavedAt(Date.now());
   }, [config]);
@@ -94,6 +143,14 @@ export default function SetupPage() {
   const resetUiDefaults = () => {
     setUi(getDefaultUiSettings());
   };
+
+  const stepValidations = useMemo(
+    () => (config ? config.steps.map((s) => validateStep(s)) : []),
+    [config]
+  );
+  const hasStepValidationError = stepValidations.some(
+    (v) => v.timeError || v.titleError
+  );
 
   if (!config || !ui) {
     return (
@@ -261,6 +318,11 @@ export default function SetupPage() {
             "Ch\u1ec9nh khung gi\u1edd, n\u1ed9i dung v\u00e0 m\u00e0u nh\u1ea5p nh\u00e1y. Ti\u1ebfn \u0111\u1ed9 ho\u00e0n th\u00e0nh do n\u00fat tr\u00ean trang ch\u00ednh; \u1edf \u0111\u00e2y c\u00f3 th\u1ec3 \u0111\u1eb7t b\u01b0\u1edbc \u0111ang ch\u1ecdn."
           }
         </p>
+        {hasStepValidationError && (
+          <p className="text-xs text-red-600 dark:text-red-400">
+            Có bước chưa hợp lệ. Kiểm tra khung giờ và độ dài nội dung trước khi lưu.
+          </p>
+        )}
 
         <div className="space-y-2">
           <label className="block text-sm font-medium text-slate-800 dark:text-slate-100">
@@ -326,6 +388,11 @@ export default function SetupPage() {
                       updateStep(index, { time: e.target.value })
                     }
                   />
+                  {stepValidations[index]?.timeError && (
+                    <p className="mt-1 text-[0.7rem] text-red-600 dark:text-red-400">
+                      {stepValidations[index].timeError}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="mb-1 block text-xs text-slate-600 dark:text-slate-400">
@@ -337,7 +404,18 @@ export default function SetupPage() {
                     onChange={(e) =>
                       updateStep(index, { title: e.target.value })
                     }
+                    maxLength={160}
                   />
+                  <div className="mt-1 flex items-center justify-between text-[0.68rem]">
+                    <span className="text-slate-500 dark:text-slate-400">
+                      {step.title.trim().length}/{MAX_TITLE_LENGTH}
+                    </span>
+                    {stepValidations[index]?.titleError && (
+                      <span className="text-red-600 dark:text-red-400">
+                        {stepValidations[index].titleError}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2 sm:col-span-2 sm:grid-cols-2">
                   <div>
@@ -383,7 +461,8 @@ export default function SetupPage() {
           <button
             type="button"
             onClick={handleSave}
-            className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-400"
+            disabled={hasStepValidationError}
+            className="rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {"L\u01b0u c\u1ea5u h\u00ecnh b\u01b0\u1edbc"}
           </button>

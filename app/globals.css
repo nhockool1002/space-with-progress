@@ -27,6 +27,14 @@ body {
   font-family: var(--font-sans), ui-monospace, monospace;
 }
 
+/* Cắt 2 dòng và hiện dấu ... cho tiêu đề step dài */
+.step-title-ellipsis {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
 /* Lớp phủ nhấp nháy tinh tế trên thẻ (opacity thấp, không lấn nền tối) */
 @keyframes step-card-tint {
   0%,

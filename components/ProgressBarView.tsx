@@ -320,7 +320,10 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
                       {done ? "\u2713" : String(i + 1).padStart(2, "0")}
                     </span>
                   </div>
-                  <p className="text-left text-[0.78rem] font-normal leading-snug text-slate-800 dark:text-slate-100 sm:text-[0.82rem]">
+                  <p
+                    className="w-full overflow-hidden text-ellipsis whitespace-nowrap text-left text-[0.78rem] font-normal leading-snug text-slate-800 dark:text-slate-100 sm:text-[0.82rem]"
+                    title={step.title}
+                  >
                     {step.title}
                   </p>
                   <p className="text-[0.55rem] text-slate-500 dark:text-slate-400">
@@ -384,7 +387,7 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
                   {active.time}
                 </span>
               )}
-              <span>{active.title}</span>
+              <span className="[overflow-wrap:anywhere]">{active.title}</span>
             </>
           ) : (
             "—"
