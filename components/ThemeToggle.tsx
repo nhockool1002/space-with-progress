@@ -15,7 +15,7 @@ type Props = {
 };
 
 export function ThemeToggle({ size = "default" }: Props) {
-  const [scheme, setScheme] = useState<ColorScheme>("light");
+  const [scheme, setScheme] = useState<ColorScheme>("dark");
 
   useEffect(() => {
     setScheme(loadColorScheme());

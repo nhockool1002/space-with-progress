@@ -166,13 +166,16 @@ export function ProgressBarView({ refreshKey = 0 }: Props) {
             className="pointer-events-none absolute left-[4%] right-[4%] top-[60%] h-3.5 -translate-y-1/2 overflow-hidden rounded-full border border-slate-300 bg-slate-200 shadow-[inset_0_2px_8px_rgba(15,23,42,0.12)] dark:border-slate-600 dark:bg-slate-800 dark:shadow-[inset_0_2px_8px_rgba(0,0,0,0.35)]"
             aria-hidden
           >
+            <div className="track-rainbow-bg absolute inset-0" />
             <div
-              className="track-fill-done h-full rounded-full bg-gradient-to-r from-emerald-600 via-emerald-400 to-teal-500 shadow-[0_0_18px_rgba(52,211,153,0.45)] transition-[width] duration-[1150ms] ease-out"
+              className="track-fill-done relative h-full overflow-hidden rounded-full bg-gradient-to-r from-emerald-600 via-emerald-400 to-teal-500 shadow-[0_0_18px_rgba(52,211,153,0.45)] transition-[width] duration-[1150ms] ease-out"
               style={{
                 width: `${fillWidthPercent}%`,
                 minWidth: fillWidthPercent > 0 ? "4px" : undefined,
               }}
-            />
+            >
+              <div className="track-fill-rainbow absolute inset-0" />
+            </div>
           </div>
           <div
             className="pointer-events-none absolute left-[4%] right-[4%] top-[60%] h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-slate-400/40 to-transparent dark:via-slate-500/25"

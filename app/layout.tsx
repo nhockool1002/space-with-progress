@@ -3,7 +3,7 @@ import { Roboto_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
-const themeInitScript = `(function(){try{var k="spaceship-color-scheme";var t=localStorage.getItem(k);if(t==="dark")document.documentElement.classList.add("dark");else document.documentElement.classList.remove("dark");}catch(e){}})();`;
+const themeInitScript = `(function(){try{var k="spaceship-color-scheme";var t=localStorage.getItem(k);if(t==="light")document.documentElement.classList.remove("dark");else document.documentElement.classList.add("dark");}catch(e){document.documentElement.classList.add("dark");}})();`;
 
 /** Toàn bộ UI dùng một monospace Google Fonts. */
 const robotoMono = Roboto_Mono({

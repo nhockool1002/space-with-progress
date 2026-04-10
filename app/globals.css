@@ -800,6 +800,63 @@ body {
   }
 }
 
+@keyframes track-rainbow-slide {
+  0% {
+    background-position: 0% 50%;
+    opacity: 0.28;
+  }
+  50% {
+    background-position: 100% 50%;
+    opacity: 0.42;
+  }
+  100% {
+    background-position: 0% 50%;
+    opacity: 0.28;
+  }
+}
+
+.track-rainbow-bg {
+  background: linear-gradient(
+    110deg,
+    rgba(239, 68, 68, 0.32),
+    rgba(249, 115, 22, 0.28),
+    rgba(250, 204, 21, 0.28),
+    rgba(34, 197, 94, 0.24),
+    rgba(6, 182, 212, 0.26),
+    rgba(59, 130, 246, 0.26),
+    rgba(139, 92, 246, 0.28),
+    rgba(236, 72, 153, 0.3)
+  );
+  background-size: 240% 240%;
+  filter: saturate(1.08);
+  animation: track-rainbow-slide 16s ease-in-out infinite;
+}
+
+.dark .track-rainbow-bg {
+  opacity: 0.24;
+  filter: saturate(0.95);
+}
+
+.track-fill-rainbow {
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(253, 224, 71, 0.2) 18%,
+    rgba(251, 146, 60, 0.22) 32%,
+    rgba(244, 114, 182, 0.18) 47%,
+    rgba(96, 165, 250, 0.2) 62%,
+    rgba(45, 212, 191, 0.2) 78%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 220% 220%;
+  mix-blend-mode: screen;
+  animation: track-rainbow-slide 10s ease-in-out infinite;
+}
+
+.dark .track-fill-rainbow {
+  opacity: 0.45;
+}
+
 .track-segment-done {
   animation: track-done-pulse 2.2s ease-in-out infinite;
 }

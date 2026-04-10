@@ -3,14 +3,14 @@ export const THEME_STORAGE_KEY = "spaceship-color-scheme";
 export type ColorScheme = "light" | "dark";
 
 export function loadColorScheme(): ColorScheme {
-  if (typeof window === "undefined") return "light";
+  if (typeof window === "undefined") return "dark";
   try {
     const raw = window.localStorage.getItem(THEME_STORAGE_KEY);
     if (raw === "dark" || raw === "light") return raw;
   } catch {
     /* ignore */
   }
-  return "light";
+  return "dark";
 }
 
 export function saveColorScheme(scheme: ColorScheme): void {
