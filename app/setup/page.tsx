@@ -96,14 +96,14 @@ export default function SetupPage() {
 
   if (!config || !ui) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-slate-500">
+      <div className="flex min-h-0 flex-1 items-center justify-center text-slate-500">
         {"\u0110ang t\u1ea3i\u2026"}
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
+    <div className="flex min-h-0 flex-1 flex-col bg-slate-50 text-slate-900">
       <header className="border-b border-slate-200/90 bg-white/90 px-4 py-4 shadow-sm backdrop-blur-sm">
         <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-3">
           <h1 className="text-lg font-semibold tracking-tight text-slate-900">

@@ -27,8 +27,11 @@ export default function RootLayout({
       lang="vi"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-slate-50 text-slate-900 antialiased">
-        {children}
+      <body className="flex min-h-screen flex-col bg-slate-50 text-slate-900 antialiased">
+        <div className="flex flex-1 flex-col">{children}</div>
+        <footer className="shrink-0 border-t border-slate-200/90 bg-white/85 py-3 text-center text-xs text-slate-500 backdrop-blur-sm">
+          NhutVjpPro
+        </footer>
       </body>
     </html>
   );

@@ -14,7 +14,7 @@ export default function Home() {
   }, [refreshKey]);
 
   return (
-    <div className="relative min-h-screen text-slate-800">
+    <div className="relative flex min-h-0 flex-1 flex-col text-slate-800">
       <div
         className="pointer-events-none fixed inset-0 -z-20 bg-slate-100 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url(/space-bg.jpg)" }}
